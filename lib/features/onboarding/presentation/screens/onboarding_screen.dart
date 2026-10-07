@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../common/widgets/buttons/default_edge_round.dart';
+import '../../../../core/navigation/nav.dart';
+import '../../../dashboard/presentation/screens/dashboard_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -14,15 +16,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
 
-  void _showActionMessage(BuildContext context, String action) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text('$action is coming soon'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+  void _openDashboard(BuildContext context) {
+    Nav.pushReplacement(context, const DashboardScreen());
   }
 
   @override
@@ -105,8 +100,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
               ),
-              onSignUp: () => _showActionMessage(context, 'Sign up'),
-              onLogin: () => _showActionMessage(context, 'Log in'),
+              onSignUp: () => _openDashboard(context),
+              onLogin: () => _openDashboard(context),
             ),
           ],
         ),
