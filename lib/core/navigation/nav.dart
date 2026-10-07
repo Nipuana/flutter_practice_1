@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class Nav {
   Nav._();
 
-  // ===========================================================================
   // PUSH OPERATIONS
-  // ===========================================================================
 
   /// Push a new screen onto the stack.
   static Future<T?> push<T>(BuildContext context, Widget screen) {
@@ -13,7 +11,6 @@ class Nav {
       MaterialPageRoute(builder: (_) => screen),
     );
   }
-
   /// Replace the current screen with a new screen (e.g., Splash -> Home).
   static Future<T?> pushReplacement<T, TO>(
     BuildContext context,
@@ -34,10 +31,10 @@ class Nav {
     );
   }
 
-  // ===========================================================================
-  // POP OPERATIONS
-  // ===========================================================================
 
+
+
+  // POP OPERATIONS
   /// Pop the top-most screen off the stack (with optional return data).
   static void pop<T>(BuildContext context, [T? result]) {
     if (Navigator.of(context).canPop()) {
