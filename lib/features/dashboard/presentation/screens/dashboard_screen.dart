@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../common/design_tokens.dart';
 import '../../../../common/widgets/bottom_navigation_bar/bottom_navigation_bar_widget.dart';
+import '../../../auth/presentation/screens/profile_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -15,22 +17,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pinterest'),
-        centerTitle: false,
-        elevation: 0,
-      ),
-      body: Center(
-        child: Text(
-          _navigationLabels[_currentIndex],
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-        ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          _DashboardPlaceholder(label: _navigationLabels[0]),
+          _DashboardPlaceholder(label: _navigationLabels[1]),
+          _DashboardPlaceholder(label: _navigationLabels[2]),
+          _DashboardPlaceholder(label: _navigationLabels[3]),
+          const ProfileScreen(embedded: true),
+        ],
       ),
       bottomNavigationBar: BottomNavBarWidget(
         currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        onTap: _onNavigationTap,
       ),
     );
+  }
+
+  void _onNavigationTap(int index) {
+    setState(() => _currentIndex = index);
   }
 
   static const _navigationLabels = [
@@ -38,6 +43,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'Search',
     'Create',
     'Notifications',
-    'Saved',
+    'Profile',
   ];
+}
+
+class _DashboardPlaceholder extends StatelessWidget {
+  const _DashboardPlaceholder({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: AppColors.text,
+        ),
+      ),
+    );
+  }
 }
