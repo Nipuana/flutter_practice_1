@@ -1,17 +1,32 @@
-# flutter_prac_1
+# Flutter Practice 1
 
-A new Flutter project.
+## Firebase authentication setup
 
-## Getting Started
+The app uses Firebase Authentication with email/password sign-in, registration,
+profile updates, and a persisted session snapshot in `shared_preferences`.
 
-This project is a starting point for a Flutter application.
+Before running the app:
 
-A few resources to get you started if this is your first Flutter project:
+1. Create a Firebase project and enable **Authentication > Sign-in method >
+   Email/Password**.
+2. Install the FlutterFire CLI and run `flutterfire configure` from the project
+   root. This creates the platform Firebase configuration required by
+   `Firebase.initializeApp()`.
+3. Run `flutter pub get`, then `flutter run`.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+The profile screen is available from the account icon in the dashboard. Changing
+an email address or password requires the current password because Firebase
+requires recent authentication for those operations.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Auth feature architecture
+
+The auth feature follows a feature-first clean architecture:
+
+- `domain/` contains the `AuthUser` entity, repository contract, failure type,
+  and sign-in, registration, profile-update, and sign-out use cases. It has no
+  Firebase or Flutter dependencies.
+- `data/` contains Firebase and `SharedPreferences` data sources, the Firebase
+  user model, and `AuthRepositoryImpl`, which maps external errors to domain
+  failures and persists the session.
+- `presentation/` contains the Cubit and screens. The Cubit depends only on
+  domain contracts and use cases; Firebase is wired in `app/app.dart`.
