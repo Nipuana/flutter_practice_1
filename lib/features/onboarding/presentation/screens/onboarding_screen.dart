@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../common/design_tokens.dart';
 import '../../../../common/widgets/buttons/default_edge_round.dart';
 import '../../../../core/navigation/nav.dart';
-import '../../../dashboard/presentation/screens/dashboard_screen.dart';
+import '../../../auth/presentation/screens/auth_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -12,12 +13,11 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  static const _pinterestRed = Color(0xFFE60023);
   final _pageController = PageController();
   int _currentPage = 0;
 
   void _openDashboard(BuildContext context) {
-    Nav.pushReplacement(context, const DashboardScreen());
+    Nav.pushReplacement(context, const AuthScreen(register: true));
   }
 
   @override
@@ -45,12 +45,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         title: 'Find your next idea',
                         subtitle:
                             'Explore inspiration for every part of your life.',
-                        color: const Color(0xFFFFE4E8),
+                        color: AppColors.onboardingPink,
                       ),
                       _PlaceholderSlide(
                         title: 'Save what inspires you',
                         subtitle: 'Create boards and keep your favorite ideas together.',
-                        color: const Color(0xFFE2F2F1),
+                        color: AppColors.onboardingTeal,
                       ),
                       _WelcomeSlide(),
                     ],
@@ -60,8 +60,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       top: 2,
                       right: 2,
                       child: Material(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.surface.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(AppRadii.pill),
                         elevation: 2,
                         child: TextButton(
                           onPressed: () => _pageController.animateToPage(
@@ -70,15 +70,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             curve: Curves.easeInOut,
                           ),
                           style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xFF333333),
+                            foregroundColor: AppColors.text,
                             minimumSize: const Size(64, 40),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 8,
-                            ),
+                            padding: AppSpacing.buttonWithHorizontal,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(
+                                AppRadii.pill,
+                              ),
                             ),
                           ),
                           child: const Text(
@@ -101,7 +100,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 curve: Curves.easeInOut,
               ),
               onSignUp: () => _openDashboard(context),
-              onLogin: () => _openDashboard(context),
+              onLogin: () => Nav.pushReplacement(
+                context,
+                const AuthScreen(register: false),
+              ),
             ),
           ],
         ),
@@ -124,7 +126,7 @@ class _PlaceholderSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: AppSpacing.screen,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -134,10 +136,10 @@ class _PlaceholderSlide extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: color,
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(AppRadii.card),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(AppRadii.card),
                 child: Image.asset(
                   'assets/images/onboard_image_3.png',
                   fit: BoxFit.cover,
@@ -145,24 +147,24 @@ class _PlaceholderSlide extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxl),
           Text(
             title,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1F1F1F),
+              color: AppColors.text,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Text(
             subtitle,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 15,
               height: 1.4,
-              color: Color(0xFF555555),
+              color: AppColors.textSecondary,
             ),
           ),
           const Spacer(),
@@ -180,7 +182,7 @@ class _WelcomeSlide extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Padding(
-          padding: const EdgeInsets.all(24),
+          padding: AppSpacing.screen,
           child: Column(
             children: [
               Expanded(
@@ -188,11 +190,11 @@ class _WelcomeSlide extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFE4E8),
-                    borderRadius: BorderRadius.circular(28),
+                    color: AppColors.onboardingPink,
+                    borderRadius: BorderRadius.circular(AppRadii.card),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(AppRadii.card),
                     child: Image.asset(
                       'assets/images/onboard_image_3.png',
                       fit: BoxFit.cover,
@@ -200,14 +202,14 @@ class _WelcomeSlide extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: AppSpacing.xxl),
               const Text(
                 'Welcome to Pinterest',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F1F1F),
+                  color: AppColors.text,
                 ),
               ),
             ],
@@ -236,12 +238,12 @@ class _BottomControls extends StatelessWidget {
     final isWelcome = currentPage == 2;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 36),
+      padding: AppSpacing.screenBottom,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _PageIndicator(currentPage: currentPage),
-          SizedBox(height: isWelcome ? 12 : 16),
+          SizedBox(height: isWelcome ? AppSpacing.md : AppSpacing.lg),
           if (isWelcome)
             const Text(
               "By continuing, you agree to Pinterest's Terms of Service and "
@@ -250,33 +252,33 @@ class _BottomControls extends StatelessWidget {
               style: TextStyle(
                 fontSize: 9,
                 height: 1.35,
-                color: Color(0xFF333333),
+                color: AppColors.text,
               ),
             ),
-          if (isWelcome) const SizedBox(height: 14),
+          if (isWelcome) const SizedBox(height: AppSpacing.md),
           SizedBox(
             width: double.infinity,
             child: RoundedButton(
               text: isWelcome ? 'Sign up' : 'Next',
               onPressed: isWelcome ? onSignUp : onNext,
-              backgroundColor: _OnboardingScreenState._pinterestRed,
-              textColor: Colors.white,
-              borderRadius: 28,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              backgroundColor: AppColors.primary,
+              textColor: AppColors.surface,
+              borderRadius: AppRadii.button,
+              padding: AppSpacing.button,
               fontSize: 14,
             ),
           ),
           if (isWelcome) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             SizedBox(
               width: double.infinity,
               child: RoundedButton(
                 text: 'Log in',
                 onPressed: onLogin,
-                backgroundColor: const Color(0xFFF0F0F0),
-                textColor: const Color(0xFF333333),
-                borderRadius: 28,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: AppColors.surfaceMuted,
+                textColor: AppColors.text,
+                borderRadius: AppRadii.button,
+                padding: AppSpacing.button,
                 fontSize: 14,
               ),
             ),
@@ -302,12 +304,12 @@ class _PageIndicator extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           width: currentPage == index ? 20 : 7,
           height: 7,
-          margin: const EdgeInsets.symmetric(horizontal: 3),
+          margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs / 2),
           decoration: BoxDecoration(
             color: currentPage == index
-                ? const Color(0xFFE60023)
-                : const Color(0xFFD8D8D8),
-            borderRadius: BorderRadius.circular(8),
+                ? AppColors.primary
+                : AppColors.inactive,
+            borderRadius: BorderRadius.circular(AppRadii.indicator),
           ),
         ),
       ),
